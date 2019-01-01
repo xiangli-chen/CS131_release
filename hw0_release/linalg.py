@@ -14,10 +14,9 @@ def dot_product(a, b):
     Returns:
         out: numpy array of shape (x, x) (scalar if x = 1)
     """
-    out = None
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
+    out = np.dot(a, b) 
+    if out.size == 1:
+        return np.squeeze(out)
     return out
 
 
@@ -35,11 +34,7 @@ def complicated_matrix_function(M, a, b):
     Returns:
         out: numpy matrix of shape (x, 1).
     """
-    out = None
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
-
+    out = dot_product(dot_product(dot_product(a, b), M), a.T)
     return out
 
 
@@ -57,13 +52,7 @@ def svd(M):
         s: numpy array of shape (k).
         v: numpy array of shape (n, n).
     """
-    u = None
-    s = None
-    v = None
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
-
+    u, s, v = np.linalg.svd(M)
     return u, s, v
 
 
@@ -80,11 +69,8 @@ def get_singular_values(M, k):
     Returns:
         singular_values: array of shape (k)
     """
-    singular_values = None
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
-    return singular_values
+    _, singular_values, _ = svd(M)
+    return singular_values[:k]
 
 
 def eigen_decomp(M):
@@ -97,11 +83,8 @@ def eigen_decomp(M):
         w: numpy array of shape (m, m) such that the column v[:,i] is the eigenvector corresponding to the eigenvalue w[i].
         v: Matrix where every column is an eigenvector.
     """
-    w = None
-    v = None
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
+    
+    w, v = np.linalg.eig(M)
     return w, v
 
 
@@ -121,9 +104,8 @@ def get_eigen_values_and_vectors(M, k):
         eigenvectors: list of length k containing the top k eigenvectors
             of shape (m, 1)
     """
-    eigenvalues = []
-    eigenvectors = []
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
+    w, v = eigen_decomp(M)
+    top_k_indices = np.argpartition(np.absolute(w), w.size-k)[w.size-k:]
+    eigenvalues = w[top_k_indices]
+    eigenvectors = v[top_k_indices]
     return eigenvalues, eigenvectors

@@ -16,15 +16,10 @@ def load(image_path):
     Returns:
         out: numpy array of shape(image_height, image_width, 3).
     """
-    out = None
-
-    ### YOUR CODE HERE
-    # Use skimage io.imread
-    pass
-    ### END YOUR CODE
-
+    out = io.imread(image_path)
     # Let's convert the image to be between the correct range.
     out = out.astype(np.float64) / 255
+    # out = out.astype(np.float64)
     return out
 
 
@@ -41,13 +36,7 @@ def dim_image(image):
     Returns:
         out: numpy array of shape(image_height, image_width, 3).
     """
-
-    out = None
-
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
-
+    out = 0.5*np.power(image, 2)
     return out
 
 
@@ -63,12 +52,7 @@ def convert_to_grey_scale(image):
     Returns:
         out: numpy array of shape(image_height, image_width).
     """
-    out = None
-
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
-
+    out = color.rgb2gray(image)
     return out
 
 
@@ -83,12 +67,13 @@ def rgb_exclusion(image, channel):
         out: numpy array of shape(image_height, image_width, 3).
     """
 
-    out = None
-
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
-
+    out = image.copy()
+    if channel == "R":
+        out[:,:,0] = 0
+    elif channel == "G":
+        out[:,:,1] = 0
+    elif channel == "B":
+        out[:,:,2] = 0
     return out
 
 
@@ -104,12 +89,12 @@ def lab_decomposition(image, channel):
     """
 
     lab = color.rgb2lab(image)
-    out = None
-
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
-
+    if channel == "L":
+        out = lab[:,:,0]
+    elif channel == "A":
+        out = lab[:,:,1]
+    elif channel == "B":
+        out = lab[:,:,2]
     return out
 
 
@@ -125,12 +110,12 @@ def hsv_decomposition(image, channel='H'):
     """
 
     hsv = color.rgb2hsv(image)
-    out = None
-
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
-
+    if channel == "H":
+        out = hsv[:,:,0]
+    elif channel == "S":
+        out = hsv[:,:,1]
+    elif channel == "V":
+        out = hsv[:,:,2]
     return out
 
 
@@ -151,11 +136,10 @@ def mix_images(image1, image2, channel1, channel2):
     Returns:
         out: numpy array of shape(image_height, image_width, 3).
     """
-
-    out = None
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
+    
+    out_left = rgb_exclusion(image1[:,0:np.int(image1.shape[1]/2),:], channel1)
+    out_right = rgb_exclusion(image2[:,0:np.int(image2.shape[1]/2),:], channel2)
+    out = np.concatenate((out_left, out_right), axis = 1)
 
     return out
 
